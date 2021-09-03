@@ -125,8 +125,28 @@ span.cam-control{
 }
 
 .options {
-	color: #46f;
-	border-bottom: 1px dashed #46f;
+	color: #FC9112;
+	border-bottom: 1px dashed #FC9112;
 	cursor: pointer;
 }
 
+.event-button {
+	cursor:  pointer;
+}
+
+.button-span {
+	float: right;
+	padding-right: 30%;
+}
+
+#AdjustableNumber-example {
+	position:relative;
+	color: #46f;
+	border-bottom: 1px dashed #46f;
+	cursor: col-resize;
+}
+
+.explanation-text {
+	text-align: justify;
+ 	text-justify: inter-word;
+}

@@ -2,11 +2,11 @@
 <html>
 
 <head>
-    <title>Time Planner</title>
+    <title>Time Estimator</title>
     <!-- UIkit CSS -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/uikit.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
     <!-- UIkit JS -->
     <script src="js/uikit.min.js"></script>
     <!-- <script src="js/uikit-icons.min.js"></script> -->
@@ -14,30 +14,30 @@
     <link rel="stylesheet" href="TangleKit/TangleKit.css" type="text/css">
 
 <body>
+
     <div class="uk-container uk-container-center uk-margin-top uk-margin-bottom center">
+    	<h1>Time estimator</h1>
+    	<p class="explanation-text">Estimating the duration of a task might be difficult without the appropriate tools. Below you will find a time estimator, designed to help you visualize better the possible durations of a task based on your own beliefs. In order for the predictive visualization to be as precise as possible, you need to decompose your task into smaller components and estimate for each sub-task (e.g., if your whole task is preparing breakfast, then sub-tasks can be brewing coffee, toasting bread and making scrambled eggs), and add surprising events that could occur and either quicken or slow the proceedingare uncertain, you also have to estimate their frequency (i.e., how likely they are to happen). You can play around with the intervals' values and options by <span class="options">clicking</span> or <span id="AdjustableNumber-example">dragging</span> them.
         <div id="sub-task-container" class="uk-margin-bottom"><h4 class="uk-h4">Breaking the task down</h4><ol id="sub-tasks" class="uk-list-decimal"></ol></div>
         <div id="surprises-container" class="uk-margin-bottom"><h4 class="uk-h4">Considering possible events slowing down or speeding up</h4><ol id="surprises" class="uk-list-decimal"></ol></div>
-        <div id="dotplot-container" class="uk-margin-bottom">
+
+        <div> <h4 class="uk-4k">Options</h4>
+        	<div>
+				<p>Live updates are <span class="options" id="update-live" onclick="toggleLiveUpdate()">on</span>.
+				You are visualizing a <span class="options" id="nb-dots" onclick="toggleNumberDots()">20</span>-dot quantile plot.</p>
+        	</div>
+
+        	 <div id="dotplot-container" class="uk-margin-bottom">
             
         </div><button id="vis-button" onclick="visualize();">Visualize</button><br/>
 
-        <div> <h3><br/>Options</h3>
-        	<div>
-        		<!--<label class="switch">
-	  				<input type="checkbox" onclick="toggleLiveUpdate()" id="update-live-switch" checked>
-	 				<span class="update-live"></span>
-	 				Live updates
-				</label>-->
-				Live updates are <span class="options" id="update-live" onclick="toggleLiveUpdate()">on</span>.
-				You are visualizing a <span class="options" id="nb-dots" onclick="toggleNumberDots()">20</span>-dot quantile plot.
-        	</div>
-        </div>
         <div>
         	<span class="sharing-link"><br/>Sharing link: </span>
         	<input type="text" name="url" id="url-text" class="readonly-url" value="" readonly>
         	<button onclick="copy_url();"><input type="image" name="clipboard" src="images/clipboard.png" alt="Copy" height="12"></button>
         	<button onclick="load_url();"><input type="image" name="toparrow" src="images/toparrow.png" alt="Load" height="12"></button>
     	</div>
+        </div>
 
     </div>
 </body>
@@ -51,7 +51,7 @@
 <script src="TangleKit/sprintf.js"></script>
 <script src="TangleKit/BVTouchable.js"></script>
 <script src="TangleKit/TangleKit.js"></script>
-<script src="js/main.js?version=2"></script>
+<script src="js/main.js?version=3"></script>
 <script src="js/generateData.js"></script>
 <script src="js/dotplot.js"></script>
 <script type="text/javascript">
@@ -110,8 +110,10 @@
         		to <span class="TKAdjustableNumber" data-var="upper" data-min="1" data-max="70"></span> 
         	minute(s)</span>
         	<span data-var="event-type" class="options event-type" onclick="changeEventType(<%=id%>);" name="event-type-<%=id%>" id="event-type-<%=id%>">slower</span>
-        	<button onclick="add_surprise(<%=id%>);">+ insert</button>
-        	<button onclick="remove_surprise(<%=id%>);">x remove</button>
+        	<span class="button-span">
+	        	<button class="event-button add-button" onclick="add_surprise(<%=id%>);">insert</button>
+	        	<button class="event-button remove-button" onclick="remove_surprise(<%=id%>);"><input type="image" name="toparrow" src="images/redcross.png" alt="remove" height="12"></button>
+	        </span>
     </div>
         <div class="uk-display-block">
             <div class="row"><span class="col-md"> it happens <span class="TKAdjustableNumber" data-var="numerator" data-min="0" data-max="1000"></span> time(s) out of  <span class="TKAdjustableNumber" data-var="denominator" data-min="1" data-max="1000"></span></span></div>
@@ -123,8 +125,11 @@
 
 <script type="text/html" id="sub_task_template">
     <li class="uk-list" id="sub-task-<%=id%>">
-        <div class="uk-display-block"><input type="text" name="sub-task-name-<%=id%>" class="sub-task name" placeholder="Name (optional)"> <span class="col-md">from <span class="TKAdjustableNumber" data-var="lower" data-min="0" data-max="70"></span> to <span class="TKAdjustableNumber" data-var="upper" data-min="1" data-max="70"></span> minute(s)</span> <button onclick="add_sub_task(<%=id%>);">+</button>
-        <button onclick="remove_sub_task(<%=id%>);">-</button></div>
+        <div class="uk-display-block"><input type="text" name="sub-task-name-<%=id%>" class="sub-task name" placeholder="Name (optional)"> <span class="col-md">from <span class="TKAdjustableNumber" data-var="lower" data-min="0" data-max="70"></span> to <span class="TKAdjustableNumber" data-var="upper" data-min="1" data-max="70"></span> minute(s)</span> 
+        	<span class="button-span">
+	        	<button class="event-button add-button" onclick="add_sub_task(<%=id%>);">insert</button>
+	        	<button class="event-button remove-button" onclick="remove_sub_task(<%=id%>);"><input type="image" name="toparrow" src="images/redcross.png" alt="remove" height="12"></button>
+	        </span>
     </li>
 
 </script>

@@ -395,6 +395,7 @@ function toggleNumberDots() {
 	var nb_dots_var = document.getElementById("nb-dots");
 	num_dots = (num_dots*2.5) % 105;
 	nb_dots_var.innerHTML = num_dots;
+	fieldsChanged();
 }
 
 function storageAvailable(type) {
