@@ -130,7 +130,7 @@ var dotplot = (function() {
       var xAxis = svg.append("g")
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).ticks(Math.ceil(xMax/10)+1));
+        .call(d3.axisBottom(x).ticks(Math.ceil(xMax/ticks)+1));
 
       // this addd the x-axis label (the unit)
       svg.append("text")             

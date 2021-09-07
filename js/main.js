@@ -10,7 +10,8 @@ var dots = [];
 var num_samples = 10000;
 var num_dots = 20;
 //const binWidth = num_dots ==  20 ? 2 : 5;
-const binWidth = 2;
+var binWidth = 2;
+var ticks = 10;
 
 var blank_url = "http://localhost:8888/index.html";
 const get_sep = '+';
@@ -43,23 +44,25 @@ function init(){
 
 // Add another sub-task
 function add_sub_task(num){
-	var update_tmp = live_update;
-	live_update = false;
-	if (sub_task_id > 0){
-		var new_task = tmpl("sub_task_template", {id: sub_task_id});
-		var where = $('#sub-task-' + num);
-		$(new_task).insertAfter(where); 
-		tangles_subtasks.splice(whereToAdd(num,subtasks_order),0,new Tangle(document.getElementById("sub-task-"+sub_task_id),model_subtasks));
-		subtasks_order.splice(whereToAdd(num,subtasks_order),0,sub_task_id);
-	} else {
-		$('#sub-tasks').append(tmpl("sub_task_template", {id: sub_task_id}));
-		tangles_subtasks.push(new Tangle(document.getElementById("sub-task-"+sub_task_id),model_subtasks));
-		subtasks_order.push(sub_task_id);
+	if (subtasks_order.length < 40) {
+		var update_tmp = live_update;
+		live_update = false;
+		if (sub_task_id > 0){
+			var new_task = tmpl("sub_task_template", {id: sub_task_id});
+			var where = $('#sub-task-' + num);
+			$(new_task).insertAfter(where); 
+			tangles_subtasks.splice(whereToAdd(num,subtasks_order),0,new Tangle(document.getElementById("sub-task-"+sub_task_id),model_subtasks));
+			subtasks_order.splice(whereToAdd(num,subtasks_order),0,sub_task_id);
+		} else {
+			$('#sub-tasks').append(tmpl("sub_task_template", {id: sub_task_id}));
+			tangles_subtasks.push(new Tangle(document.getElementById("sub-task-"+sub_task_id),model_subtasks));
+			subtasks_order.push(sub_task_id);
+		}
+		sub_task_id++;
+		live_update = update_tmp;
+		attachListeners();
+		fieldsChanged();
 	}
-	sub_task_id++;
-	live_update = update_tmp;
-	attachListeners();
-	fieldsChanged();
 }
 
 function remove_sub_task(num){
@@ -137,15 +140,20 @@ if(update) {
 		update_sub_tasks();
 		update_surprises();
 	}
+	var maxVal = 0;
 	
 	//console.log("considering " + sub_tasks.length + " sub-tasks");
 	samples = [];
 	for (var i = num_samples - 1; i >= 0; i--) {
-		samples.push(Math.max(get_task_sample()+get_surprise_sample(),0));
+		var newSample = Math.max(get_task_sample()+get_surprise_sample(),0);
+		samples.push(newSample);
+		maxVal = maxVal < newSample ? newSample : maxVal;
 	}
+	updateBinWidth(maxVal);
 	dotplot.draw();
 	update_url();
 	update_local_storage();
+	console.log(window.innerWidth);
 }
 
 function load_arguments() {
@@ -420,6 +428,32 @@ function storageAvailable(type) {
             // acknowledge QuotaExceededError only if there's something already stored
             storage.length !== 0;
     }
+}
+
+
+function updateBinWidth(maxVal) {
+	binWidth = 2;
+	ticks = 10;
+	var wSize = window.innerWidth;
+	var maxDots = Math.round(wSize/200)*10;
+	console.log("max dots = "+maxDots);
+	console.log("max val = "+maxVal);
+	maxVal = Math.ceil(maxVal/10)*10;
+	var i = 0;
+	while (maxVal/binWidth > maxDots) {
+		console.log("bin width = "+binWidth);
+		if (binWidth == 2) {binWidth = 5;}
+		else if (binWidth == 20) {binWidth = 50;}
+		else {
+			binWidth *= 2;
+		}
+		console.log("bin width = "+binWidth);
+		i++;
+
+	}
+	if (binWidth >= 10) {
+		ticks = 25 * Math.exp(i-2);
+	}
 }
 
 
