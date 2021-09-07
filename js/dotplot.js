@@ -139,7 +139,7 @@ var dotplot = (function() {
                              (height + margin.top + 20) + ")")
         .style("text-anchor", "middle")
         .style("font-size", "12px")
-        .text("Minutes");
+        .text(units_dotplot[unit]);
       
       // now we create bins again from the shortened array
       bins = bin(shortened).filter(d => d.length>0);

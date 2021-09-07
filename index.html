@@ -108,7 +108,8 @@
         	<span class="col-md">from 
         		<span class="TKAdjustableNumber" data-var="lower" data-min="0" data-max="200"></span> 
         		to <span class="TKAdjustableNumber" data-var="upper" data-min="1" data-max="200"></span> 
-        	minute(s)</span>
+        		<span data-var="event-type" class="options unit" onclick="changeUnit();" id="unit-surprise-<%=id%>">minute(s)</span>
+        	</span>
         	<span data-var="event-type" class="options event-type" onclick="changeEventType(<%=id%>);" name="event-type-<%=id%>" id="event-type-<%=id%>">slower</span>
         	<span class="button-span">
 	        	<button class="event-button add-button" onclick="add_surprise(<%=id%>);">insert</button>
@@ -125,7 +126,7 @@
 
 <script type="text/html" id="sub_task_template">
     <li class="uk-list" id="sub-task-<%=id%>">
-        <div class="uk-display-block"><input type="text" name="sub-task-name-<%=id%>" class="sub-task name" placeholder="Name (optional)"> <span class="col-md">from <span class="TKAdjustableNumber" data-var="lower" data-min="0" data-max="200"></span> to <span class="TKAdjustableNumber" data-var="upper" data-min="1" data-max="200"></span> minute(s)</span> 
+        <div class="uk-display-block"><input type="text" name="sub-task-name-<%=id%>" class="sub-task name" placeholder="Name (optional)"> <span class="col-md">from <span class="TKAdjustableNumber" data-var="lower" data-min="0" data-max="200"></span> to <span class="TKAdjustableNumber" data-var="upper" data-min="1" data-max="200"></span> <span data-var="event-type" class="options unit" onclick="changeUnit();" id="unit-subtask-<%=id%>">minute(s)</span></span> 
         	<span class="button-span">
 	        	<button class="event-button add-button" onclick="add_sub_task(<%=id%>);">insert</button>
 	        	<button class="event-button remove-button" onclick="remove_sub_task(<%=id%>);"><input type="image" name="toparrow" src="images/redcross.png" alt="remove" height="12"></button>

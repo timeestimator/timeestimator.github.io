@@ -25,6 +25,9 @@ var tangles_surprises = [];
 var subtasks_order = [];
 var surprises_order = [];
 
+var unit = 0;
+const units = ["minute(s)","hour(s)","day(s)"];
+const units_dotplot = ["Minutes","Hours","Days"];
 
 
 function init(){
@@ -58,6 +61,7 @@ function add_sub_task(num){
 			tangles_subtasks.push(new Tangle(document.getElementById("sub-task-"+sub_task_id),model_subtasks));
 			subtasks_order.push(sub_task_id);
 		}
+		document.getElementById("unit-subtask-"+sub_task_id).innerHTML = units[unit];
 		sub_task_id++;
 		live_update = update_tmp;
 		attachListeners();
@@ -89,6 +93,7 @@ function add_surprise(num){
 		tangles_surprises.push(new Tangle(document.getElementById("surprise-"+surprise_id),model_surprises));
 		surprises_order.push(surprise_id);
 	}
+	document.getElementById("unit-surprise-"+surprise_id).innerHTML = units[unit];
 	surprise_id++;
 	live_update = update_tmp;
 	attachListeners();
@@ -217,6 +222,18 @@ function load_arguments() {
 		if (new_surprise.lower != '' && new_surprise.upper != '')
 			surprises.push(new_surprise);
 	});
+	if(args.has("nd")) {
+		num_dots = 50;
+		document.getElementById("nb-dots").innerHTML = "50";
+	}
+	if(args.has("lu")) {
+		live_update = false;
+		document.getElementById("update-live").innerHTML = "off";
+	}
+	if(args.has("un")) {
+		var arg = args.get("un");
+		unit = parseInt(arg)%3;
+	}
 	visualize(false);
 
 }
@@ -275,6 +292,9 @@ function update_url() {
 		query += "&nd=50"
 	}
 	//window.location.href = blank_url + query;
+	if (unit != 0) {
+		query+="&un="+unit;
+	}
 	$('#url-text').val(blank_url+query);
 	update_local_storage();
 }
@@ -406,31 +426,6 @@ function toggleNumberDots() {
 	fieldsChanged();
 }
 
-function storageAvailable(type) {
-    try {
-        var storage = window[type],
-            x = '__storage_test__';
-        storage.setItem(x, x);
-        storage.removeItem(x);
-        return true;
-    }
-    catch(e) {
-        return e instanceof DOMException && (
-            // everything except Firefox
-            e.code === 22 ||
-            // Firefox
-            e.code === 1014 ||
-            // test name field too, because code might not be present
-            // everything except Firefox
-            e.name === 'QuotaExceededError' ||
-            // Firefox
-            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
-            // acknowledge QuotaExceededError only if there's something already stored
-            storage.length !== 0;
-    }
-}
-
-
 function updateBinWidth(maxVal) {
 	binWidth = 2;
 	ticks = 10;
@@ -454,6 +449,14 @@ function updateBinWidth(maxVal) {
 	if (binWidth >= 10) {
 		ticks = 25 * Math.exp(i-2);
 	}
+}
+
+function changeUnit() {
+	unit = (unit + 1)%3;
+	$('.unit').each(function(index, element){
+		element.innerHTML = units[unit];
+	})
+	fieldsChanged();
 }
 
 
