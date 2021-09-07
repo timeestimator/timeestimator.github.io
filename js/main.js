@@ -181,12 +181,14 @@ function load_arguments(arguments=location.search) {
 			which_one++;
 			document.getElementById("example-"+which_one).disabled = true;
 		}catch(error){console.error(error);}
+		live_update = true;
 		return 0;
 	}
 
 	// SUB-TASKS
 	if (!args.has("st0")) {
 		load_local_storage();
+		live_update = true;
 		return 0;
 	}
 	var i = 0;
@@ -213,6 +215,7 @@ function load_arguments(arguments=location.search) {
 
 	if (!args.has("sp0")) {
 		visualize(true);
+		live_update = true;
 		return 0;
 	}
 	i = 0;
