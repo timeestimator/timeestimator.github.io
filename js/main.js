@@ -29,6 +29,8 @@ var unit = 0;
 const units = ["minute(s)","hour(s)","day(s)"];
 const units_dotplot = ["Minutes","Hours","Days"];
 
+const examples = ["?st0=getting_ready_to_leave+5+10&st1=going_to_the_grocery_store+10+15&st2=finding_the_necessary_items+1+5&st3=paying_for_the_items+2+5&st4=getting_back_home+10+15&sp0=I_use_a_self-service_cash_register+5+10+0+10+-1&sp1=there_is_a_long_queue_at_the_checkout+10+15+3+10+1&sp2=the_store_was_recently_rearranged+5+10+1+10+1&sp3=I_meet_someone_I_know_on_the_way+10+15+1+10+1&sp4=I_plan_ahead_and_know_what_to_buy+2+3+3+5+-1&sp5=I_cannot_find_my_wallet_or_my_keys+5+10+1+5+1&nd=50"];
+
 
 function init(){
 	// get url
@@ -38,6 +40,7 @@ function init(){
 	
 	add_sub_task();
 	add_surprise();
+	//load_arguments(arguments=examples[0]);
 	load_arguments();
 	attachListeners();
 	if (live_update) {
@@ -158,11 +161,16 @@ if(update) {
 	dotplot.draw();
 	update_url();
 	update_local_storage();
-	console.log(window.innerWidth);
 }
 
-function load_arguments() {
-	var args = new URLSearchParams(location.search);
+function load_arguments(arguments=location.search) {
+	var args = new URLSearchParams(arguments);
+	live_update = false;
+
+	if (args.has("example")) {
+		try{load_arguments(arguments=examples[parseInt(args.get("example"))%examples.length]);}catch(error){console.error(error);}
+		return 0;
+	}
 
 	// SUB-TASKS
 	if (!args.has("st0")) {
@@ -177,22 +185,22 @@ function load_arguments() {
 		i++;
 	}
 	var ar = $('#sub-tasks').children();
-	sub_tasks = [];
+	//sub_tasks = [];
 	ar.each(function(index, element){
 		var arg = args.get("st"+index).split(" ");
-		$('.name', element).val(arg[0]);
+		$('.name', element).val(arg[0].replaceAll("_"," "));
 		tangles_subtasks[index].setValue("lower",parseInt(arg[1]));
 		tangles_subtasks[index].setValue("upper",parseInt(arg[2]));
-		var new_task = {name : arg[0], 
+		/*var new_task = {name : arg[0], 
 						lower: arg[1],
 						upper: arg[2]
 					};
 		if (new_task.lower != '' && new_task.upper != '')
-			sub_tasks.push(new_task);
+			sub_tasks.push(new_task);*/
 	});
 
 	if (!args.has("sp0")) {
-		visualize(false);
+		visualize(true);
 		return 0;
 	}
 	i = 0;
@@ -203,29 +211,30 @@ function load_arguments() {
 		i++;
 	}
 	ar = $('#surprises').children();
-	surprises = [];
+	//surprises = [];
 	ar.each(function(index, element){
 		var arg = args.get("sp"+index).split(" ");
-		$('.name', element).val(arg[0]);
+		$('.name', element).val(arg[0].replaceAll("_"," "));
 		tangles_surprises[index].setValue("lower",parseInt(arg[1],10));
 		tangles_surprises[index].setValue("upper",parseInt(arg[2],10));
 		tangles_surprises[index].setValue("numerator",parseInt(arg[3],10));
 		tangles_surprises[index].setValue("denominator",parseInt(arg[4],10));
 		tangles_surprises[index].setValue("sign",parseInt(arg[5],10));
 		$('.event-type',element)[0].innerHTML = parseInt(arg[5],10) < 0 ? 'faster' : 'slower';
-		var new_surprise = {name : arg[0], 
+		/*var new_surprise = {name : arg[0], 
 						lower: arg[1],
 						upper: arg[2],
 						likelihood: parseInt(arg[3],10)/parseInt(arg[4],10),
 						sign: parseInt(arg[5],10) > 0 ? '+' : '-'
 					};
 		if (new_surprise.lower != '' && new_surprise.upper != '')
-			surprises.push(new_surprise);
+			surprises.push(new_surprise);*/
 	});
 	if(args.has("nd")) {
 		num_dots = 50;
 		document.getElementById("nb-dots").innerHTML = "50";
 	}
+	live_update = true;
 	if(args.has("lu")) {
 		live_update = false;
 		document.getElementById("update-live").innerHTML = "off";
@@ -237,7 +246,7 @@ function load_arguments() {
 	$('.unit').each(function(index, element){
 		element.innerHTML = units[unit];
 	});
-	visualize(false);
+	visualize(true);
 
 }
 
@@ -280,13 +289,13 @@ function update_url() {
 	var i = 0;
 	ar.each(function(index, element){
 		if (i != 0) {query += "&";}
-		query += "st"+i+"="+$('.name', element).val()+"+"+tangles_subtasks[index].getValue("lower")+"+"+tangles_subtasks[index].getValue("upper");
+		query += "st"+i+"="+$('.name', element).val().replaceAll(" ","_")+"+"+tangles_subtasks[index].getValue("lower")+"+"+tangles_subtasks[index].getValue("upper");
 		i++;
 	});
 	ar = $('#surprises').children();
 	i = 0;
 	ar.each(function(index, element){
-		query += "&sp"+i+"="+$('.name', element).val()+"+"+tangles_surprises[index].getValue("lower")+"+"+tangles_surprises[index].getValue("upper")+"+"+tangles_surprises[index].getValue("numerator")+"+"+tangles_surprises[index].getValue("denominator")+"+"+tangles_surprises[index].getValue("sign");
+		query += "&sp"+i+"="+$('.name', element).val().replaceAll(" ","_")+"+"+tangles_surprises[index].getValue("lower")+"+"+tangles_surprises[index].getValue("upper")+"+"+tangles_surprises[index].getValue("numerator")+"+"+tangles_surprises[index].getValue("denominator")+"+"+tangles_surprises[index].getValue("sign");
 		i++;
 	});
 	if (!live_update) {
@@ -434,18 +443,14 @@ function updateBinWidth(maxVal) {
 	ticks = 10;
 	var wSize = window.innerWidth;
 	var maxDots = Math.min(Math.round(wSize/200)*10,50);
-	console.log("max dots = "+maxDots);
 	maxVal = Math.ceil(maxVal/10)*10+10;
-	console.log("max val = "+maxVal);
 	var i = 0;
 	while (maxVal/binWidth > maxDots) {
-		console.log("bin width = "+binWidth);
 		if (binWidth == 2) {binWidth = 5;}
 		else if (binWidth == 20) {binWidth = 50;}
 		else {
 			binWidth *= 2;
 		}
-		console.log("bin width = "+binWidth);
 		i++;
 
 	}
