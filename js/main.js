@@ -234,6 +234,9 @@ function load_arguments() {
 		var arg = args.get("un");
 		unit = parseInt(arg)%3;
 	}
+	$('.unit').each(function(index, element){
+		element.innerHTML = units[unit];
+	});
 	visualize(false);
 
 }
@@ -455,7 +458,7 @@ function changeUnit() {
 	unit = (unit + 1)%3;
 	$('.unit').each(function(index, element){
 		element.innerHTML = units[unit];
-	})
+	});
 	fieldsChanged();
 }
 
