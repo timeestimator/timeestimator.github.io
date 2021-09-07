@@ -435,10 +435,10 @@ function updateBinWidth(maxVal) {
 	binWidth = 2;
 	ticks = 10;
 	var wSize = window.innerWidth;
-	var maxDots = Math.round(wSize/200)*10;
+	var maxDots = Math.min(Math.round(wSize/200)*10,50);
 	console.log("max dots = "+maxDots);
+	maxVal = Math.ceil(maxVal/10)*10+10;
 	console.log("max val = "+maxVal);
-	maxVal = Math.ceil(maxVal/10)*10;
 	var i = 0;
 	while (maxVal/binWidth > maxDots) {
 		console.log("bin width = "+binWidth);
