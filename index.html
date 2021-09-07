@@ -18,7 +18,9 @@
 
     <div class="uk-container uk-container-center uk-margin-top uk-margin-bottom center">
     	<h1>Time estimator</h1>
-    	<p class="explanation-text">Estimating the duration of a task might be difficult without the appropriate tools. Below you will find a time estimator, designed to help you better visualize the possible durations of a task based on your own beliefs. In order for the predictive visualization to be as precise as possible, you need to (1) decompose your task into smaller components and estimate for each sub-task (e.g., if your whole task is preparing breakfast, then sub-tasks can be brewing coffee, toasting bread and making scrambled eggs), and (2) add surprising events that could occur and either quicken or slow down the proceedings of your task (e.g., you burn the eggs or someone already made some coffee). Since those events are uncertain, you also need to estimate their frequency (i.e., how likely they are to happen). You can play around with the intervals' values and options by <span class="options">clicking</span> or <span id="AdjustableNumber-example">dragging</span> them.
+    	<p class="explanation-text">Estimating the duration of a task might be difficult without the appropriate tools. Below you will find a time estimator, designed to help you better visualize the possible durations of a task based on your own beliefs. In order for the predictive visualization to be as precise as possible, you need to (1) decompose your task into smaller components and estimate for each sub-task (e.g., if your whole task is preparing breakfast, then sub-tasks can be brewing coffee, toasting bread and making scrambled eggs), and (2) add surprising events that could occur and either quicken or slow down the proceedings of your task (e.g., you burn the eggs or someone already made some coffee). Since those events are uncertain, you also need to estimate their frequency (i.e., how likely they are to happen). You can play around with the intervals' values and options by <span class="options">clicking</span> or <span id="AdjustableNumber-example">dragging</span> them.</p>
+    	<div id="examples-container"></div><br/>
+
         <div id="sub-task-container" class="uk-margin-bottom"><h4 class="uk-h4">Breaking the task down</h4><ol id="sub-tasks" class="uk-list-decimal"></ol></div>
         <div id="surprises-container" class="uk-margin-bottom"><h4 class="uk-h4">Considering possible events slowing down or speeding up</h4><ol id="surprises" class="uk-list-decimal"></ol></div>
 
@@ -134,5 +136,13 @@
 	        </span>
     </li>
 
+</script>
+
+<script type="text/html" id="example_template">
+    <button onclick="loadExample(<%=id%>);" id="example-<%=id%>">Example <%=id%></button>
+</script>
+
+<script type="text/html" id="refresh_button">
+    <button onclick="refresh();">Try if yourself</button>
 </script>
 

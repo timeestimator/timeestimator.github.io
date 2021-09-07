@@ -29,18 +29,25 @@ var unit = 0;
 const units = ["minute(s)","hour(s)","day(s)"];
 const units_dotplot = ["Minutes","Hours","Days"];
 
-const examples = ["?st0=getting_ready_to_leave+5+10&st1=going_to_the_grocery_store+10+15&st2=finding_the_necessary_items+1+5&st3=paying_for_the_items+2+5&st4=getting_back_home+10+15&sp0=I_use_a_self-service_cash_register+5+10+0+10+-1&sp1=there_is_a_long_queue_at_the_checkout+10+15+3+10+1&sp2=the_store_was_recently_rearranged+5+10+1+10+1&sp3=I_meet_someone_I_know_on_the_way+10+15+1+10+1&sp4=I_plan_ahead_and_know_what_to_buy+2+3+3+5+-1&sp5=I_cannot_find_my_wallet_or_my_keys+5+10+1+5+1&nd=50"];
-
+const examples = ["?st0=getting_ready_to_leave+5+10&st1=going_to_the_grocery_store+10+15&st2=finding_the_necessary_items+1+5&st3=paying_for_the_items+2+5&st4=getting_back_home+10+15&sp0=I_use_a_self-service_cash_register+5+10+0+10+-1&sp1=there_is_a_long_queue_at_the_checkout+10+15+3+10+1&sp2=the_store_was_recently_rearranged+5+10+1+10+1&sp3=I_meet_someone_I_know_on_the_way+10+15+1+10+1&sp4=I_plan_ahead_and_know_what_to_buy+2+3+3+5+-1&sp5=I_cannot_find_my_wallet_or_my_keys+5+10+1+5+1&nd=50",
+				  "?st0=getting_ready_to_leave+1+5&st1=going_to_the_grocery_store+15+20&st2=finding_the_necessary_items+1+5&st3=paying_for_the_items+1+3&st4=getting_back_home+15+20&sp0=there_is_a_long_queue_at_the_checkout+10+15+2+5+1&sp1=I_meet_someone_I_know_on_the_way+10+20+1+10+1&sp2=I_plan_ahead_and_know_what_to_buy+1+3+7+10+-1&sp3=I_cannot_find_my_wallet_or_my_keys+10+15+3+10+1",
+				  "?st0=tie_the_dog_with_the_leash+1+2&st1=get_out_of_building+1+4&st2=walk_to_the_park+6+10&st3=play_with_the_dog+10+15&st4=get_back_home+6+10&sp0=the_dog_does_its_business+2+3+3+5+1&sp1=it_rains_or_the_weather_is_unpleasant+15+20+1+15+-1&sp2=the_dog's_friends_are_at_the_park_as_well+5+10+1+2+1&sp3=the_dog_is_tired+5+10+1+15+-1&nd=50"];
 
 function init(){
 	// get url
 	var whole_url = window.location.href;
 	blank_url = whole_url.split("?")[0];
 	$('#url-text').val(whole_url);
+
+	for(var i = 0 ; i < examples.length ; i++) {
+		$('#examples-container').append(tmpl("example_template", {id: i+1}));
+	}
+	if (examples.length > 0) {
+		$('#examples-container').append(tmpl("refresh_button", {id: 0}));
+	}
 	
 	add_sub_task();
 	add_surprise();
-	//load_arguments(arguments=examples[0]);
 	load_arguments();
 	attachListeners();
 	if (live_update) {
@@ -168,7 +175,12 @@ function load_arguments(arguments=location.search) {
 	live_update = false;
 
 	if (args.has("example")) {
-		try{load_arguments(arguments=examples[parseInt(args.get("example"))%examples.length]);}catch(error){console.error(error);}
+		try{
+			var which_one = Math.max((parseInt(args.get("example"))-1)%examples.length,0);
+			load_arguments(arguments=examples[which_one]);
+			which_one++;
+			document.getElementById("example-"+which_one).disabled = true;
+		}catch(error){console.error(error);}
 		return 0;
 	}
 
@@ -189,8 +201,8 @@ function load_arguments(arguments=location.search) {
 	ar.each(function(index, element){
 		var arg = args.get("st"+index).split(" ");
 		$('.name', element).val(arg[0].replaceAll("_"," "));
-		tangles_subtasks[index].setValue("lower",parseInt(arg[1]));
 		tangles_subtasks[index].setValue("upper",parseInt(arg[2]));
+		tangles_subtasks[index].setValue("lower",parseInt(arg[1]));
 		/*var new_task = {name : arg[0], 
 						lower: arg[1],
 						upper: arg[2]
@@ -214,13 +226,14 @@ function load_arguments(arguments=location.search) {
 	//surprises = [];
 	ar.each(function(index, element){
 		var arg = args.get("sp"+index).split(" ");
+		console.log(arg);
 		$('.name', element).val(arg[0].replaceAll("_"," "));
-		tangles_surprises[index].setValue("lower",parseInt(arg[1],10));
-		tangles_surprises[index].setValue("upper",parseInt(arg[2],10));
-		tangles_surprises[index].setValue("numerator",parseInt(arg[3],10));
-		tangles_surprises[index].setValue("denominator",parseInt(arg[4],10));
-		tangles_surprises[index].setValue("sign",parseInt(arg[5],10));
-		$('.event-type',element)[0].innerHTML = parseInt(arg[5],10) < 0 ? 'faster' : 'slower';
+		tangles_surprises[index].setValue("upper",parseInt(arg[2]));
+		tangles_surprises[index].setValue("lower",parseInt(arg[1]));
+		tangles_surprises[index].setValue("denominator",parseInt(arg[4]));
+		tangles_surprises[index].setValue("numerator",parseInt(arg[3]));
+		tangles_surprises[index].setValue("sign",parseInt(arg[5]));
+		$('.event-type',element)[0].innerHTML = parseInt(arg[5]) < 0 ? 'faster' : 'slower';
 		/*var new_surprise = {name : arg[0], 
 						lower: arg[1],
 						upper: arg[2],
@@ -259,8 +272,8 @@ function load_local_storage() {
 	var ar = $('#sub-tasks').children();
 	ar.each(function(index,element){
 		$('.name', element).val(localStorage.getItem("st"+i+"_name"));
-		tangles_subtasks[index].setValue("lower",parseInt(localStorage.getItem("st"+index+"_lower")));
 		tangles_subtasks[index].setValue("upper",parseInt(localStorage.getItem("st"+index+"_upper")));
+		tangles_subtasks[index].setValue("lower",parseInt(localStorage.getItem("st"+index+"_lower")));
 	});
 
 	for(var i = 0 ; i < parseInt(localStorage.getItem("surprises")) ; i++) {
@@ -271,10 +284,10 @@ function load_local_storage() {
 	ar = $('#surprises').children();
 	ar.each(function(index,element){
 		$('.name', element).val(localStorage.getItem("sp"+index+"_name"));
-		tangles_surprises[index].setValue("lower",parseInt(localStorage.getItem("sp"+index+"_lower")));
 		tangles_surprises[index].setValue("upper",parseInt(localStorage.getItem("sp"+index+"_upper")));
-		tangles_surprises[index].setValue("numerator",parseInt(localStorage.getItem("sp"+index+"_numerator")));
+		tangles_surprises[index].setValue("lower",parseInt(localStorage.getItem("sp"+index+"_lower")));
 		tangles_surprises[index].setValue("denominator",parseInt(localStorage.getItem("sp"+index+"_denominator")));
+		tangles_surprises[index].setValue("numerator",parseInt(localStorage.getItem("sp"+index+"_numerator")));
 		tangles_surprises[index].setValue("sign",parseInt(localStorage.getItem("sp"+index+"_sign")));
 		$('.event-type',element)[0].innerHTML = parseInt(localStorage.getItem("sp"+index+"_sign")) < 0 ? 'faster' : 'slower';
 	});
@@ -346,6 +359,7 @@ function load_url() {
 }
 
 function fieldsChanged() {
+	enableAllExamples();
 	if (live_update) {
 		visualize();
 		return true;
@@ -467,6 +481,19 @@ function changeUnit() {
 	fieldsChanged();
 }
 
+function loadExample(num) {
+	window.location.href = blank_url+"?example="+num;
+}
+
+function refresh() {
+	window.location.href = blank_url;
+}
+
+function enableAllExamples() {
+	for (var i = 1 ; i <= examples.length ; i++) {
+		document.getElementById("example-"+i).disabled=false;
+	}
+}
 
 
 
