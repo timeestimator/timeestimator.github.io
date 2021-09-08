@@ -29,7 +29,7 @@ var unit = 0;
 const units = ["minute(s)","hour(s)","day(s)"];
 const units_dotplot = ["Minutes","Hours","Days"];
 
-const examples = ["?st0=getting_ready_to_leave+5+10&st1=going_to_the_grocery_store+10+15&st2=finding_the_necessary_items+1+5&st3=paying_for_the_items+2+5&st4=getting_back_home+10+15&sp0=I_use_a_self-service_cash_register+5+10+0+10+-1&sp1=there_is_a_long_queue_at_the_checkout+10+15+3+10+1&sp2=the_store_was_recently_rearranged+5+10+1+10+1&sp3=I_meet_someone_I_know_on_the_way+10+15+1+10+1&sp4=I_plan_ahead_and_know_what_to_buy+2+3+3+5+-1&sp5=I_cannot_find_my_wallet_or_my_keys+5+10+1+5+1&nd=50",
+var examples = ["?st0=getting_ready_to_leave+5+10&st1=going_to_the_grocery_store+10+15&st2=finding_the_necessary_items+1+5&st3=paying_for_the_items+2+5&st4=getting_back_home+10+15&sp0=I_use_a_self-service_cash_register+5+10+0+10+-1&sp1=there_is_a_long_queue_at_the_checkout+10+15+3+10+1&sp2=the_store_was_recently_rearranged+5+10+1+10+1&sp3=I_meet_someone_I_know_on_the_way+10+15+1+10+1&sp4=I_plan_ahead_and_know_what_to_buy+2+3+3+5+-1&sp5=I_cannot_find_my_wallet_or_my_keys+5+10+1+5+1&nd=50",
 				  "?st0=getting_ready_to_leave+1+5&st1=going_to_the_grocery_store+15+20&st2=finding_the_necessary_items+1+5&st3=paying_for_the_items+1+3&st4=getting_back_home+15+20&sp0=there_is_a_long_queue_at_the_checkout+10+15+2+5+1&sp1=I_meet_someone_I_know_on_the_way+10+20+1+10+1&sp2=I_plan_ahead_and_know_what_to_buy+1+3+7+10+-1&sp3=I_cannot_find_my_wallet_or_my_keys+10+15+3+10+1",
 				  "?st0=tie_the_dog_with_the_leash+1+2&st1=get_out_of_building+1+4&st2=walk_to_the_park+6+10&st3=play_with_the_dog+10+15&st4=get_back_home+6+10&sp0=the_dog_does_relieves_itself+2+3+3+5+1&sp1=it_rains_or_the_weather_is_unpleasant+15+20+1+15+-1&sp2=the_dog's_friends_are_at_the_park_as_well+5+10+1+2+1&sp3=the_dog_is_tired+5+10+1+15+-1&nd=50"];
 
@@ -156,8 +156,6 @@ if(update) {
 		update_surprises();
 	}
 	var maxVal = 0;
-	
-	//console.log("considering " + sub_tasks.length + " sub-tasks");
 	samples = [];
 	for (var i = num_samples - 1; i >= 0; i--) {
 		var newSample = Math.max(get_task_sample()+get_surprise_sample(),0);
@@ -178,6 +176,7 @@ function load_arguments(arguments=location.search) {
 		try{
 			var which_one = Math.max((parseInt(args.get("example"))-1)%examples.length,0);
 			load_arguments(arguments=examples[which_one]);
+			document.getElementById("examples-container").scrollIntoView();
 			which_one++;
 			document.getElementById("example-"+which_one).disabled = true;
 		}catch(error){console.error(error);}
@@ -186,9 +185,9 @@ function load_arguments(arguments=location.search) {
 	}
 
 	// SUB-TASKS
-	if (!args.has("st0")) {
-		load_local_storage();
+	if (!args.has("st0")) {	
 		live_update = true;
+		load_local_storage();
 		return 0;
 	}
 	var i = 0;
@@ -214,8 +213,8 @@ function load_arguments(arguments=location.search) {
 	});
 
 	if (!args.has("sp0")) {
-		visualize(true);
 		live_update = true;
+		visualize(true);
 		return 0;
 	}
 	i = 0;
@@ -229,7 +228,6 @@ function load_arguments(arguments=location.search) {
 	//surprises = [];
 	ar.each(function(index, element){
 		var arg = args.get("sp"+index).split(" ");
-		console.log(arg);
 		$('.name', element).val(arg[0].replaceAll("_"," "));
 		tangles_surprises[index].setValue("upper",parseInt(arg[2]));
 		tangles_surprises[index].setValue("lower",parseInt(arg[1]));
