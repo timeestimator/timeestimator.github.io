@@ -136,9 +136,9 @@ var dotplot = (function() {
       svg.append("text")             
         .attr("transform",
               "translate(" + (width/2) + " ," + 
-                             (height + margin.top + 20) + ")")
+                             (height + margin.top + 15) + ")")
         .style("text-anchor", "middle")
-        .style("font-size", "12px")
+        .style("font-size", "10px")
         .text(units_dotplot[unit]);
       
       // now we create bins again from the shortened array
