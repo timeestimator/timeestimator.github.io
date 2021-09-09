@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Time Estimator -- Supplemental material</title>
+    <!-- UIkit CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/uikit.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <!-- UIkit JS -->
+    <script src="js/uikit.min.js"></script>
+    <!-- <script src="js/uikit-icons.min.js"></script> -->
+    <script src="js/jquery.min.js"></script>
+    <link rel="icon" href="images/dots.png">
+</head>
+
+<body>
+    <div class="uk-container uk-container-center uk-margin-top uk-margin-bottom center">
+        <h1 class="titles"><span id="title1" onclick="changePage();"> Time estimator</span><span id="title2">Supplemental material</span></h1>
+        <p class="explanation-text">
+            This website is an extension of a research on the planning fallacy, a phenomenon in which underestimation of future tasks' duration is almost systematic and not lessened by the knowledge of how long past tasks have taken to be completed.
+            We conducted a crowdsourced study (see <a onclick="toScenario();">scenario</a>) based on the hypothesis that compound probabilities and mixture distributions, involved in the estimation of a task duration, are difficult to mentally process. 145 participants provided different estimates of overall and sub-task durations and we used these to generate <strong>predictive visualizations</strong> of the resulting mixture distributions (see <a onclick="toDotplots();">resulting dot plots</a>).
+        </p>
+
+            <div>
+                <h4 onclick="toggleSlideShow();" class="clickable-title">Experiment pages <img class="arrows" id="arrow1" src="images/arrow-down.png" width="42px"></h4>
+                <div id="exp-images-container" hidden>
+                <!-- Slideshow container -->
+                <div class="slideshow-container">
+              
+
+                  <!-- Next and previous buttons -->
+                  <a id="prev-button" class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                </div>
+                <br>
+
+                <!-- The dots/circles -->
+                <div id="dots-container"></div>
+            </div>
+            </div>
+
+            <div>
+                <h4 onclick="toggleGallery();" class="clickable-title">Resulting dot plots <img class="arrows" id="arrow2" src="images/arrow-down.png" width="42px"></h4>
+                <div id="res-images-container" class="row" hidden>
+                    <div class="row"> 
+                      <div class="column" id="column1">
+                      </div>
+                      <div class="column" id="column2">
+                      </div> 
+                    </div>
+                </div>
+            </div>
+
+
+    </div>
+</body>
+</html>
+<script src="js/jquery-ui.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js" integrity="sha512-MGT8BGoc8L3124PwHEGTC+M8Hu9oIbZOg8ENcd92sQKKidWKOOOZ6bqQemqYAX0yXJUnovOkF4Hx9gc/5lVxPw==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js" integrity="sha512-+Ru50BzEpZjlFzVnjSmJfYFPFfY2hS0Kjlu/IvqaJoux7maF5lJrRVUJWJ2LevPls7rd242GLbWEt+zAo4OVVQ==" crossorigin="anonymous"></script>
+<script src="js/supp-mat.js></script>
+<script type="text/javascript">
+
+/** Simple JavaScript Templating
+ *  John Resig - https://johnresig.com/ - MIT Licensed
+ *  code taken from https://johnresig.com/blog/javascript-micro-templating 
+ ***/
+    (function(){
+      var cache = {};
+       
+      this.tmpl = function tmpl(str, data){
+        // Figure out if we're getting a template, or if we need to
+        // load the template - and be sure to cache the result.
+        var fn = !/\W/.test(str) ?
+          cache[str] = cache[str] ||
+            tmpl(document.getElementById(str).innerHTML) :
+           
+          // Generate a reusable function that will serve as a template
+          // generator (and which will be cached).
+          new Function("obj",
+            "var p=[],print=function(){p.push.apply(p,arguments);};" +
+             
+            // Introduce the data as local variables using with(){}
+            "with(obj){p.push('" +
+             
+            // Convert the template into pure JavaScript
+            str
+              .replace(/[\r\t\n]/g, " ")
+              .split("<%").join("\t")
+              .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+              .replace(/\t=(.*?)%>/g, "',$1,'")
+              .split("\t").join("');")
+              .split("%>").join("p.push('")
+              .split("\r").join("\\'")
+          + "');}return p.join('');");
+         
+        // Provide some basic currying to the user
+        return data ? fn( data ) : fn;
+      };
+    })();
+
+</script>
+
+
+<script type="text/html" id="exp_images_template">
+    <!-- Full-width images with number -->
+    <div class="mySlides fade">
+        <div class="numbertext"></div>
+        <img src="images/experiment/page<%=id%>.jpg" style="width:100%">
+    </div>
+</script>
+
+<script type="text/html" id="dots_template">
+    <span class="dot" onclick="currentSlide(<%=id%>)"></span>
+</script>
+
+
+
+

@@ -45,6 +45,8 @@ function init(){
 	if (examples.length > 0) {
 		$('#examples-container').append(tmpl("refresh_button", {id: 0}));
 	}
+
+	document.getElementById("title2").className += "unselected";
 	
 	add_sub_task();
 	add_surprise();
@@ -494,6 +496,10 @@ function enableAllExamples() {
 	for (var i = 1 ; i <= examples.length ; i++) {
 		document.getElementById("example-"+i).disabled=false;
 	}
+}
+
+function changePage() {
+	window.location.href = "supplemental-material.html";
 }
 
 
