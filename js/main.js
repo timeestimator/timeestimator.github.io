@@ -45,8 +45,6 @@ function init(){
 	if (examples.length > 0) {
 		$('#examples-container').append(tmpl("refresh_button", {id: 0}));
 	}
-
-	document.getElementById("title2").className += "unselected";
 	
 	add_sub_task();
 	add_surprise();
