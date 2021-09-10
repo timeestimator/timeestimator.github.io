@@ -19,7 +19,7 @@
         <h1 class="titles"><span id="title1" class="unselected" onclick="changePage();"> Time estimator</span><span id="title2">Supplemental material</span></h1>
         <p class="explanation-text">
             This website is an extension of a research on the planning fallacy, a phenomenon in which underestimation of future tasks' duration is almost systematic and not lessened by the knowledge of how long past tasks have taken to be completed.
-            We conducted a crowdsourced study (see <a onclick="toScenario();">scenario</a>) based on the hypothesis that compound probabilities and mixture distributions, involved in the estimation of a task duration, are difficult to mentally process. 145 participants provided different estimates of overall and sub-task durations and we used these to generate <strong>predictive visualizations</strong> of the resulting mixture distributions (see <a onclick="toDotplots();">resulting dot plots</a>).
+            We conducted a crowdsourced study (see <a onclick="toScenario();">scenario</a>) based on the hypothesis that compound probabilities and mixture distributions, involved in the estimation of a task duration, are difficult to mentally process. 145 participants provided different estimates of overall and sub-task durations and we used these to generate <strong>predictive visualizations</strong> of the resulting mixture distributions (see <a onclick="toDotplots();">resulting dot plots</a>). We also introduced a linechart tool to half of the participants, aimed at supporting time-related decision making. The way they interacted with the visualization is presented with animated gif (see <a onclick="toLinecharts();">linecharts</a>). For more information on the procedure, analysis and results, you can refer to the paper, download <a href="https://osf.io/3nvkr/?view_only=ceb5b7efa8d3425481817fe19be25b59">OSF files</a>, or access the <a href="output.html">analysis output</a> directly.
         </p>
 
             <div>
@@ -43,18 +43,19 @@
             <div>
                 <h4 onclick="toggleGallery();" class="clickable-title">Resulting dot plots <img class="arrows" id="arrow2" src="images/arrow-down.png" width="42px"></h4>
                 <div id="res-images-container" class="row" hidden>
-                    <div class="row"> 
-                      <div class="column" id="column1">
-                      </div>
-                      <div class="column" id="column2">
-                      </div> 
-                      <div class="column" id="column3">
-                      </div> 
-                      <div class="column" id="column4">
-                      </div> 
-                    </div>
+                    <div class="row-gallery" id="gallery1">
+                </div>
                 </div>
             </div>
+
+            <div>
+                <h4 onclick="toggleGallery2();" class="clickable-title">Animated linecharts <img class="arrows" id="arrow3" src="images/arrow-down.png" width="42px"></h4>
+                <div id="res-linecharts-container" class="row" hidden>
+                    <div class="row-gallery" id="gallery2">
+                </div>
+                </div>
+            </div>
+
 
 
     </div>
@@ -119,6 +120,19 @@
 <script type="text/html" id="dots_template">
     <span class="dot" onclick="currentSlide(<%=id%>)"></span>
 </script>
+
+<script type="text/html" id="dotplot_template">
+    <div class="column-gallery">
+        <a href="images/dotplots/<%=id%>"><img src="images/dotplots/<%=id%>" style="width:100%"></a>
+  </div>
+</script>
+
+<script type="text/html" id="linechart_template">
+    <div class="column-gallery">
+        <a href="images/linecharts/<%=id%>.gif"><img src="images/linecharts/<%=id%>.gif" style="width:100%"></a>
+  </div>
+</script>
+
 
 
 
