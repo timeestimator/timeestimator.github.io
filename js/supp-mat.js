@@ -123,6 +123,16 @@ function toggleGallery() {
 
 }
 
+function toggleExperiment() {
+	var container = document.getElementById("exp-thumbnail-container");
+	container.hidden = !container.hidden;
+	if (container.hidden) {
+		document.getElementById("arrow2").src = "images/arrow-down.png";
+	} else {
+		document.getElementById("arrow2").src = "images/arrow-up.png";
+	}
+
+}
 
 function changePage() {
 	window.location.href = "index.html";
@@ -131,13 +141,22 @@ function changePage() {
 function toScenario() {
 	document.getElementById("exp-images-container").hidden=false;
 	document.getElementById("arrow1").src = "images/arrow-up.png";
-	document.getElementsByClassName("clickable-title")[0].scrollIntoView();
+	// document.getElementsByClassName("clickable-title")[0].scrollIntoView();
+	document.getElementById("exp-images-heading").scrollIntoView();
 }
 
 function toDotplots() {
 	document.getElementById("res-images-container").hidden=false;
 	document.getElementById("arrow2").src = "images/arrow-up.png";
-	document.getElementsByClassName("clickable-title")[1].scrollIntoView();
+	// document.getElementsByClassName("clickable-title")[1].scrollIntoView();
+	document.getElementById("res-images-heading").scrollIntoView();
+}
+
+function toExperiment() {
+	document.getElementById("exp-thumbnail-container").hidden=false;
+	document.getElementById("arrow2").src = "images/arrow-up.png";
+	// document.getElementsByClassName("clickable-title")[2].scrollIntoView();
+	document.getElementById("exp-thumbnail-heading").scrollIntoView();
 }
 
 function toggleGallery2() {
@@ -154,7 +173,8 @@ function toggleGallery2() {
 function toLinecharts() {
 	document.getElementById("res-linecharts-container").hidden=false;
 	document.getElementById("arrow3").src = "images/arrow-up.png";
-	document.getElementsByClassName("clickable-title")[2].scrollIntoView();
+	// document.getElementsByClassName("clickable-title")[3].scrollIntoView();
+	document.getElementById("res-linecharts-heading").scrollIntoView();
 }
 
 

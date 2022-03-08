@@ -19,13 +19,14 @@
 
     <div class="uk-container uk-container-center uk-margin-top uk-margin-bottom center">
     	<h1 class="titles"><span id="title1">1. Time estimator</span><span id="title2" class="unselected" onclick="changePage();">2. Supplemental material</span></h1>
-    	<p class="explanation-text">Estimating the duration of a task might be difficult without the appropriate tools. Below you will find a time estimator, designed to help you better visualize the possible durations of a task based on your own beliefs. In order for the predictive visualization to be as precise as possible, you need to (1) decompose your task into smaller components and estimate for each sub-task (e.g., if your whole task is preparing breakfast, then sub-tasks can be brewing coffee, toasting bread and making scrambled eggs), and (2) add surprising events that could occur and either quicken or slow down the proceedings of your task (e.g., you burn the eggs or someone already made some coffee). Note that for the visualization to accurately represent your beliefs, you should not enter two events that are dependent or joint (i.e., that are inter-related: one happening influences or includes the other). Since those events are uncertain, you also need to estimate their frequency (i.e., how likely they are to happen). You can play around with the intervals' values and options by <span class="options">clicking</span> or <span id="AdjustableNumber-example">dragging</span> them.</p>
+    	<p class="explanation-text">Estimating the duration of a task might be difficult without the appropriate tools. Below you will find a time estimator, designed to help you better visualize the possible durations of a task based on your own beliefs. In order for the predictive visualization to be as precise as possible, you need to (1) decompose your task into smaller components and estimate for each sub-task (e.g., if your whole task is preparing breakfast, then sub-tasks can be brewing coffee, toasting bread and making scrambled eggs), and (2) add surprising events that could occur and either quicken or slow down the proceedings of your task (e.g., you burn the eggs or someone already made some coffee). Since those events are uncertain, you also need to estimate their frequency (i.e., how likely they are to happen). You can play around with the intervals' values and options by <span class="options">clicking</span> or <span id="AdjustableNumber-example">dragging</span> them.<br>
+    	Limitation: Note that the current version of this tool can only handle independent events. That is, for the visualization to accurately represent your beliefs, the area of surprise events slowing you down or speeding you up, should only contain events where one of them does not depend on another one listed on another row.</p>
     	<div id="examples-container"></div><br/>
 
     	<div id="estimator-tool">
 
-        <div id="sub-task-container" class="uk-margin-bottom"><h4 class="uk-h4">Breaking the task down</h4><ol id="sub-tasks" class="uk-list-decimal"></ol></div>
-        <div id="surprises-container" class="uk-margin-bottom"><h4 class="uk-h4">Considering possible events slowing down or speeding up</h4><ol id="surprises" class="uk-list-decimal"></ol></div>
+        <div id="sub-task-container" class="uk-margin-bottom"><h4 class="uk-h4">1. Break the task down into steps</h4><ol id="sub-tasks" class="uk-list-decimal"></ol></div>
+        <div id="surprises-container" class="uk-margin-bottom"><h4 class="uk-h4">2. Consider surprise events which could slow you down or speed you up</h4><ol id="surprises" class="uk-list-decimal"></ol></div>
 
         <div> <h4 class="uk-4k">Options</h4>
         	<div>
@@ -48,8 +49,23 @@
 
     <p class="explanation-text">
     	This is a project by Morgane Koval and <a href="http://yvonnejansen.me">Yvonne Jansen</a>.
-    	This tool was developed as a result of a study on predictive visualizations (see <a href="https://doi.org/10.1145/3491102.3502010">paper</a> and <a href="https://osf.io/3nvkr/?view_only=ceb5b7efa8d3425481817fe19be25b59">OSF</a> for full method). You can also access supplemental material through this <a href="supplemental-material.html">page</a>. The pre-registered analysis of our study can be found <a href="output.html">here</a> directly.
+    	This tool was developed as a result of a study on predictive visualizations (see <a href="https://hal.inria.fr/hal-03599998/document">paper</a> and <a href="https://osf.io/bwqkh/">OSF</a> for full method) combined with the <a href="http://worrydream.com/Tangle/">Tangle</a> javascript library by <a href="http://worrydream.com/">Bret Victor</a>. You can also access supplemental material through this <a href="supplemental-material.html">page</a>. If you want to go directly to our pre-registration, you can click here and if you're only interested in the detailed results of our analysis, then you can go <a href="output.html">here</a> directly. If you want to reuse any of the material on this page, please cite our article.
         </p>
+        <p>Morgane Koval, Yvonne Jansen. <strong>Do You See What You Mean? Using Predictive Visualizations to Reduce Optimism in Duration Estimates.</strong> CHI 2022 - Conference on Human Factors in Computing Systems, Apr 2022, New Orleans, United States. DOI 10.1145/3491102.3502010.</p>
+        <p class="bibtex">@inproceedings{koval2022do,<br>
+  TITLE = {{Do You See What You Mean? Using Predictive Visualizations to Reduce Optimism in Duration Estimates}},<br>
+  AUTHOR = {Koval, Morgane and Jansen, Yvonne},<br>
+  URL = {https://hal.inria.fr/hal-03599998},<br>
+  BOOKTITLE = {{CHI 2022 - Conference on Human Factors in Computing Systems}},<br>
+  ADDRESS = {New Orleans, United States},<br>
+  YEAR = {2022},<br>
+  MONTH = Apr,<br>
+  DOI = {10.1145/3491102.3502010},<br>
+  KEYWORDS = {Planning fallacy ; predictive visualization},<br>
+  PDF = {https://hal.inria.fr/hal-03599998/file/<br>CHI_2022___Planning_fallacy_resubmission.pdf},<br>
+  HAL_ID = {hal-03599998},<br>
+  HAL_VERSION = {v1},<br>
+}</p>
 
     </div>
 </body>

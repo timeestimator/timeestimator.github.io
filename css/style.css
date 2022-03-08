@@ -335,4 +335,21 @@ span.cam-control{
 }
 
 
+img.exp-thumbnail {
+	max-width: 400px;
+}
 
+div.exp-item {
+	border: solid;
+	display: inline-block;
+	float: left;
+	margin: 5px;
+	padding: 5px;
+	clear: both;
+}
+
+.bibtex{
+	font:  monospace;
+	padding-left: 1.5em;
+  text-indent:-1.5em;
+}
